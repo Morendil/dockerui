@@ -1,2 +1,4 @@
 dockerui
 *.esproj*
+.DS_Store
+app
