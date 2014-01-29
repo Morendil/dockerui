@@ -69,6 +69,24 @@ angular.module('dockerui.filters', [])
 			return name.substring(1, name.length);
         };
     })
+    .filter('c_version', function() {
+        return function(container) {
+			var name = container.Names[0];
+			return name.substring(1, name.length).split("-")[2];
+        };
+    })
+    .filter('c_type', function() {
+        return function(container) {
+			var name = container.Names[0];
+			return name.substring(1, name.length).split("-")[1];
+        };
+    })
+    .filter('c_catalogue', function() {
+        return function(container) {
+			var name = container.Names[0];
+			return name.substring(1, name.length).split("-")[3];
+        };
+    })
     .filter('repotag', function() {
         return function(image) {
         	if (image.RepoTags && image.RepoTags.length > 0) {

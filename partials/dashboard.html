@@ -16,7 +16,7 @@
             <h3>Running Containers</h3>
             <ul>
                 <li ng-repeat="container in containers|orderBy:predicate">
-                    <a href="/#/containers/{{ container.Id }}/">{{ container.Image }}</a>
+                    <a href="/#/containers/{{ container.Id }}/">{{ container|containername }}</a>
                     <span class="label label-{{ container.Status|statusbadge }}">{{ container.Status }}</span>
                 </li>
             </ul>
@@ -34,10 +34,6 @@
     <div class="span10" id="stats">
         <h4>Containers created</h4>
        <canvas id="containers-started-chart" width="700" style="float:left">
-            Get a better browser... Your holding everyone back.
-       </canvas>
-        <h4>Images created</h4>
-       <canvas id="images-created-chart" width="700" style="float:left">
             Get a better browser... Your holding everyone back.
        </canvas>
     </div>
