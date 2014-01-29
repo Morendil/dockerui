@@ -445,12 +445,16 @@ function StartContainerController($scope, $routeParams, $location, Container, Me
 			"MOCK="+$scope.ismock($scope.config),
 			"ROOT="+$scope.rootfor($scope.config)],
 		ExposedPorts: {
-             		"9000/tcp": {},
-             		"22/tcp": {},
+             		"9000": {},
+             		"22": {}
      		}
             }, function(d) {
                 if (d.Id) {
-                    ctor.start({id: d.Id}, function(cd) {
+                    ctor.start({id: d.Id,
+                            PortBindings:
+                                {"9000": [{"HostPort":"0"}],
+                                 "22": [{"HostPort":"0"}]}
+                    }, function(cd) {
                         $('#create-modal').modal('hide');
                         loc.path('/containers/');
                     }, function(e) {
