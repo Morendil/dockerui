@@ -396,16 +396,36 @@ function ImageController($scope, $q, $routeParams, $location, Image, Container, 
     $scope.getHistory();
 }
 
-function StartContainerController($scope, $routeParams, $location, Container, Messages) {
+function StartContainerController($scope, $routeParams, $location, Container, Messages, $http) {
     $scope.template = 'partials/startcontainer.html';
     $scope.config = {
-        memory: 0,
-        memorySwap: 0,
-        env: '',
-        commands: '',
-        volumesFrom: ''
+        version: '',
+        catalogue: ''
     };
-    $scope.commandPlaceholder = '["/bin/echo", "Hello world"]';
+    $scope.versions = [];
+    $scope.catalogues = [];
+
+    $http.get("/versions.json").success(function(data) {
+      $scope.versions = angular.fromJson(data);
+    });
+
+    $http.get("/catalogues.json").success(function(data) {
+      $scope.catalogues = angular.fromJson(data);
+    });
+
+    $scope.ismock = function(config) {
+      return config.version.loc.indexOf("-mock") >=0 ? "mock" : "nomock";
+    }
+
+    $scope.rootfor = function(config) {
+      return config.version.loc.indexOf("-mock") >=0 ? "http://localhost:9000/soft-cu-mock" : "http://localhost:9000/soft-cu";
+    }
+
+    $scope.namefor = function(config) {
+      var type = $scope.ismock(config);
+      var stamp = Date.now() / 1000;
+      return "soft-"+type+"-"+$scope.config.version.name+"-"+$scope.config.catalogue.name+"-"+stamp;
+    }
 
     $scope.create = function() {
         var cmds = null;
@@ -418,16 +438,21 @@ function StartContainerController($scope, $routeParams, $location, Container, Me
         var s = $scope;
 
         Container.create({
-                Image: id,
-                Memory: $scope.config.memory,
-                MemorySwap: $scope.config.memorySwap,
-                Cmd: cmds,
-                VolumesFrom: $scope.config.volumesFrom
+		name:$scope.namefor($scope.config),
+                Image: "morendil/jonas4-parametrized",
+		Env: ["WAR="+$scope.config.version.loc,
+			"CATALOGUE="+$scope.config.catalogue.loc,
+			"MOCK="+$scope.ismock($scope.config),
+			"ROOT="+$scope.rootfor($scope.config)],
+		ExposedPorts: {
+             		"9000/tcp": {},
+             		"22/tcp": {},
+     		}
             }, function(d) {
                 if (d.Id) {
                     ctor.start({id: d.Id}, function(cd) {
                         $('#create-modal').modal('hide');
-                        loc.path('/containers/' + d.Id + '/');
+                        loc.path('/containers/');
                     }, function(e) {
                         failedRequestHandler(e, Messages);
                     });

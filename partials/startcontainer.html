@@ -6,19 +6,14 @@
   <div class="modal-body">
     <form>
         <fieldset>
-            <legend>Start container from Image</legend>
+            <legend>Start container</legend>
 
-            <label>Cmd:</label>
-            <input type="text" placeholder="{{ commandPlaceholder }}" ng-model="config.commands"/>
-            <small>Input commands as an array</small>
-            <label>Memory:</label>
-            <input type="number" ng-model="config.memory"/>
+            <label>Version:</label>
+            <select ng-model="config.version" ng-options="v.name for v in versions" required/>
 
-            <label>Memory Swap:</label>
-            <input type="number" ng-model="config.memorySwap"/>
+            <label>Catalogue:</label>
+            <select ng-model="config.catalogue" ng-options="c.name for c in catalogues" required/>
 
-            <label>Volumes From:</label>
-            <input type="text" ng-model="config.volumesFrom"/>
         </fieldset>
     </form>
   </div>

@@ -12,7 +12,7 @@ angular.module('dockerui.services', ['ngResource'])
             restart: {method: 'POST', params: {id: '@id', t: 5, action: 'restart' }},
             kill :{method: 'POST', params: {id: '@id', action:'kill'}},
             changes :{method: 'GET', params: {action:'changes'}, isArray: true},
-            create :{method: 'POST', params: {action:'create'}},
+            create :{method: 'POST', params: {action:'create', name:'@name'}},
             remove :{method: 'DELETE', params: {id: '@id', v:0}}
         });
     })
