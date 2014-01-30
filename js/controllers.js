@@ -413,6 +413,10 @@ function StartContainerController($scope, $routeParams, $location, Container, Me
       $scope.catalogues = angular.fromJson(data);
     });
 
+    $http.get("/properties.json").success(function(data) {
+      $scope.properties = angular.fromJson(data);
+    });
+
     $scope.ismock = function(config) {
       return config.version.loc.indexOf("-mock") >=0 ? "mock" : "nomock";
     }
@@ -443,6 +447,7 @@ function StartContainerController($scope, $routeParams, $location, Container, Me
 		Env: ["WAR="+$scope.config.version.loc,
 			"CATALOGUE="+$scope.config.catalogue.loc,
 			"MOCK="+$scope.ismock($scope.config),
+			"CONFIG="+$scope.properties,
 			"ROOT="+$scope.rootfor($scope.config)],
 		ExposedPorts: {
              		"9000": {},
